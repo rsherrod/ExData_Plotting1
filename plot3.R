@@ -1,18 +1,19 @@
 setwd('C:\\Training\\exploratory_data')
 
-data_big <- read.csv(file="household_power_consumption.txt", header=T, sep=';', na.strings="?", 
-                     check.names=F, stringsAsFactors=F, comment.char="", quote='\"')
+#read full data set
+data <- read.csv(file="household_power_consumption.txt", header=T, sep=';', na.strings="?", 
+                 check.names=F, stringsAsFactors=F, comment.char="", quote='\"')
+#format date variable
+data$Date <- as.Date(data$Date, format="%d/%m/%Y")
 
-data_big$Date <- as.Date(data_big$Date, format="%d/%m/%Y")
-
-#Extract subset and convert dates
-data <- subset(data_big, subset=(Date >= "2007-02-01" & Date <= "2007-02-02"))
-datetime <- paste(as.Date(data$Date), data$Time)
-data$Datetime <- as.POSIXct(datetime)
+#Extract subset
+data2 <- subset(data, subset=(Date >= "2007-02-01" & Date <= "2007-02-02"))
+datetime <- paste(as.Date(data2$Date), data2$Time) 
+data2$Datetime <- as.POSIXct(datetime) 
 
 
-#Create Plot 3
-with(data, {
+#plot 3
+with(data2, {
         plot(Sub_metering_1~Datetime, type="l",
              ylab="Global Active Power (kilowatts)", xlab="")
         lines(Sub_metering_2~Datetime,col='Red')
